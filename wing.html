@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>クイズ</title>
+</head>
+<body>
+
+<h2 id="question">問題がここに表示されます</h2>
+
+<div id="choices"></div>
+
+<p id="result"></p>
+<button id="nextBtn" style="display:none;" onclick="nextQuestion()">次の問題へ</button>
+
+<script>
+const quizData = [
+  {
+    q: "初期のドラえもんが好きだったものはどら焼きではなく、なんでしょうか？",
+    choices: ["<こんにゃく>", "<ごまだんご>", "<まんじゅう>", "<もち>"],
+    answer: 4
+  },
+  {
+    q: "野比のび太の子どもの名前は？",
+    choices: ["セワシ", "ノビスケ", "ノビター", "のび助"],
+    answer: 2
+  }
+];
+
+let currentQuiz = 0;
+
+function loadQuiz() {
+  const questionEl = document.getElementById("question");
+  const choicesEl = document.getElementById("choices");
+  const resultEl = document.getElementById("result");
+  const nextBtn = document.getElementById("nextBtn");
+
+  resultEl.textContent = "";
+  nextBtn.style.display = "none";
+
+  questionEl.textContent = quizData[currentQuiz].q;
+  choicesEl.innerHTML = "";
+
+  quizData[currentQuiz].choices.forEach((choice, index) => {
+    const btn = document.createElement("button");
+    btn.textContent = choice;
+    btn.onclick = () => checkAnswer(index);
+    choicesEl.appendChild(btn);
+    choicesEl.appendChild(document.createElement("br"));
+  });
+}
+
+function checkAnswer(selected) {
+  const resultEl = document.getElementById("result");
+  const nextBtn = document.getElementById("nextBtn");
+
+  if (selected === quizData[currentQuiz].answer) {
+    resultEl.textContent = "✅ 正解！";
+  } else {
+    resultEl.textContent = "❌ 不正解…";
+  }
+  nextBtn.style.display = "block";
+}
+
+function nextQuestion() {
+  currentQuiz++;
+  if (currentQuiz < quizData.length) {
+    loadQuiz();
+  } else {
+    document.getElementById("question").textContent = "🎉 クイズ終了！おつかれさまでした！";
+    document.getElementById("choices").innerHTML = "";
+    document.getElementById("nextBtn").style.display = "none";
+  }
+}
+
+loadQuiz();
+</script>
+
+</body>
+</html>
